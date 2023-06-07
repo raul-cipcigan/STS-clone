@@ -1,21 +1,24 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 	public List<GameObject> drawnCards = new List<GameObject>();
-	public Enemy[] enemies;
-	public Player player;
+	public List<Enemy> enemies;
+	private Player player;
 
 	private GameObject heldCard;
 
-	public DeckManager deckManager;
+	private DeckManager deckManager;
 
 	public int energy = 3;
 
 	private void Start() {
-		enemies = FindObjectsOfType<Enemy>();
+		enemies = FindObjectsOfType<Enemy>().ToList();
+		player = FindObjectOfType<Player>();
+		deckManager = FindObjectOfType<DeckManager>();
 		foreach (Enemy enemy in enemies) {
 			enemy.ChooseMove();
 		}
@@ -74,11 +77,13 @@ public class GameManager : MonoBehaviour {
 
 		foreach (Enemy enemy in enemies) {
 			enemy.ResetDefence();
+
 			if (enemy.nextMove != 0) {
 				enemy.Attack();
 			} else {
-				enemy.GainDefence(5);
+				enemy.GainDefence();
 			}
+
 			enemy.ChooseMove();
 		}
 

@@ -8,11 +8,12 @@ public class DeckManager : MonoBehaviour {
 	public List<GameObject> drawPile;
 	public List<GameObject> discardPile;
 
-	public GameManager gameManager;
+	private GameManager gameManager;
 
-	public System.Random rng = new System.Random();
+	private System.Random rng = new System.Random();
 
 	private void Start() {
+		gameManager = FindObjectOfType<GameManager>();
 		Shuffle(deck);
 		StartCoroutine(gameManager.Draw(4));
 	}
