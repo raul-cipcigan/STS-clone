@@ -2,25 +2,39 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 	public List<GameObject> drawnCards = new List<GameObject>();
-	public List<Enemy> enemies;
+	private List<Enemy> enemies;
 	private Player player;
+
+	public GameObject gameOverScreen;
+	public GameObject endTurnButton;
+
+	public TextMeshProUGUI energyText;
 
 	private GameObject heldCard;
 
+	public GameObject deckManagerPrefab;
 	private DeckManager deckManager;
 
 	public int energy = 3;
+	private bool gameOver = false;
 
 	private void Start() {
 		enemies = FindObjectsOfType<Enemy>().ToList();
 		player = FindObjectOfType<Player>();
-		deckManager = FindObjectOfType<DeckManager>();
 		foreach (Enemy enemy in enemies) {
 			enemy.ChooseMove();
+		}
+		energyText.text = "3/3";
+
+		deckManager = FindObjectOfType<DeckManager>();
+		if (deckManager == null) {
+			deckManager = Instantiate(deckManagerPrefab).GetComponent<DeckManager>();
 		}
 	}
 
@@ -41,7 +55,11 @@ public class GameManager : MonoBehaviour {
 	private void DrawCard(GameObject card) {
 		if (card != null) {
 			GameObject newCard = Instantiate(card, new Vector2(-10, -4), Quaternion.identity);
+
+			//Lorsque la carte est détruite, l'objet ajoutée à discardPile est "Missing Object".
+			//Pour contourner ceci, je sauvegarde le prefab de la carte dans la carte elle-même pour la récupérer plus tard.
 			newCard.GetComponent<Card>().thisPrefab = card;
+
 			drawnCards.Add(newCard);
 			Recenter();
 		}
@@ -67,12 +85,46 @@ public class GameManager : MonoBehaviour {
 		Recenter();
 	}
 
+	//Dans Enemy.cs, j'aurais pu utiliser manager.enemies.Remove(this), mais il faut que je compte le nombre d'enemis restants.
+	public void EnemyDeath(Enemy enemy) {
+		enemies.Remove(enemy);
+
+		if (enemies.Count == 0) {
+			deckManager.CombatEnd();
+			SceneManager.LoadScene(1);
+		}
+	}
+
 	public void CallEndTurn() {
 		StartCoroutine(EndTurn());
 	}
 
+	public void GameOver() {
+		gameOver = true;
+		StopAllCoroutines();
+		gameOverScreen.SetActive(true);
+		energyText.gameObject.SetActive(false);
+		player.gameObject.SetActive(false);
+		endTurnButton.SetActive(false);
+
+		foreach (Enemy enemy in enemies) {
+			enemy.gameObject.SetActive(false);
+		}
+		
+		foreach (GameObject card in drawnCards) {
+			Destroy(card);
+		}
+
+		Destroy(deckManager);
+		
+		//Arrête toutes les fonctions du jeu
+		gameObject.SetActive(false);
+	}
+
 	private IEnumerator EndTurn() {
 		energy = 3;
+		energyText.text = energy.ToString() + "/3";
+
 		yield return StartCoroutine(Discard());
 
 		foreach (Enemy enemy in enemies) {
@@ -80,6 +132,9 @@ public class GameManager : MonoBehaviour {
 
 			if (enemy.nextMove != 0) {
 				enemy.Attack();
+				if (gameOver) {
+					yield break;
+				}
 			} else {
 				enemy.GainDefence();
 			}

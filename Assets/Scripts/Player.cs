@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
 
+	private GameManager manager;
+
 	public TextMeshPro healthText;
 	public TextMeshPro defenceText;
 
@@ -14,16 +16,16 @@ public class Player : MonoBehaviour {
 	public int defence = 0;
 
 	private void Start() {
+		manager = FindObjectOfType<GameManager>();
+
 		healthText.text = health.ToString() + "/80";
 		defenceText.text = "";
 	}
 
 	public void GainDefence(int amount) {
 		defence += amount;
-		if (defence != 0) {
-			defenceIcon.SetActive(true);
-			defenceText.text = defence.ToString();
-		}
+		defenceIcon.SetActive(true);
+		defenceText.text = defence.ToString();
 	}
 
 	public void Heal(int amount) {
@@ -42,9 +44,14 @@ public class Player : MonoBehaviour {
 			amount -= defence;
 			defence = 0;
 			health -= amount;
+
 			healthText.text = health.ToString() + "/80";
 			defenceText.text = "";
 			defenceIcon.SetActive(false);
+
+			if (health <= 0) {
+				manager.GameOver();
+			}
 		}
 	}
 

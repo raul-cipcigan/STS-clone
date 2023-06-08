@@ -13,6 +13,8 @@ public class DeckManager : MonoBehaviour {
 	private System.Random rng = new System.Random();
 
 	private void Start() {
+		DontDestroyOnLoad(gameObject);
+
 		gameManager = FindObjectOfType<GameManager>();
 		Shuffle(deck);
 		StartCoroutine(gameManager.Draw(4));
@@ -28,6 +30,8 @@ public class DeckManager : MonoBehaviour {
 			}
 			GameObject nextCard = drawPile[0];
 			drawPile.Remove(nextCard);
+			nextCard.GetComponent<CardChoice>().enabled = false;
+			nextCard.GetComponent<Card>().enabled = true;
 			return nextCard;
 		} else {
 			return null;
@@ -35,9 +39,12 @@ public class DeckManager : MonoBehaviour {
 	}
 
 	public void DiscardCard(GameObject card) {
-		//Lorsque la carte est détruite, l'objet ajoutée à discardPile est "Missing Object".
-		//Pour contourner ceci, je sauvegarde la position de chaque carte dans le deck par défaut pour retrouver son prefab.
 		discardPile.Add(card);
+	}
+
+	public void CombatEnd() {
+		drawPile.Clear();
+		discardPile.Clear();
 	}
 
 	private void Shuffle(List<GameObject> source) {

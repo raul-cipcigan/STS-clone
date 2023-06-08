@@ -58,29 +58,39 @@ public class Card : MonoBehaviour {
 	}
 
 	private void OnMouseDown() {
-		if (!isHeld) {
-			isHeld = true;
-			manager.SetHeldCard(gameObject);
-		} else {
-			isHeld = false;
-			clickDone = false;
-			manager.SetHeldCard(null);
+		//OnMouseDown() ne semble pas se desactiver lorsque le Card script ou le CardChoice script sont desactivées.
+		if (enabled) {
+			if (!isHeld) {
+				isHeld = true;
+				manager.SetHeldCard(gameObject);
+			} else {
+				isHeld = false;
+				clickDone = false;
+				manager.SetHeldCard(null);
+			}
 		}
 	}
 
 	public void Play(GameObject target = null) {
 		Discard();
 		manager.energy -= cost;
-		if (target != null) {
-			target.GetComponent<Enemy>().TakeDamage(damage);
-		} else {
-			Enemy[] enemies = FindObjectsOfType<Enemy>();
-			for (int i = 0; i < enemies.Length; i++) {
-				enemies[i].TakeDamage(damage);
+		manager.energyText.text = manager.energy.ToString() + "/3";
+		if (damage != 0) {
+			if (target != null) {
+				target.GetComponent<Enemy>().TakeDamage(damage);
+			} else {
+				Enemy[] enemies = FindObjectsOfType<Enemy>();
+				for (int i = 0; i < enemies.Length; i++) {
+					enemies[i].TakeDamage(damage);
+				}
 			}
 		}
-		player.GainDefence(defence);
-		player.Heal(heal);
+		if (defence != 0) {
+			player.GainDefence(defence);
+		}
+		if (heal != 0) {
+			player.Heal(heal);
+		}
 		if (draw != 0) {
 			finishedDrawing = false;
 			StartCoroutine(manager.Draw(draw, this));

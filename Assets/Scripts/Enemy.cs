@@ -30,7 +30,6 @@ public class Enemy : MonoBehaviour {
 	private void Start() {
 		manager = FindObjectOfType<GameManager>();
 		player = FindObjectOfType<Player>();
-		ChooseMove();
 		healthText.text = health.ToString() + "/" + maxHealth.ToString();
 		defenceText.text = "";
 	}
@@ -59,7 +58,7 @@ public class Enemy : MonoBehaviour {
 			defenceIcon.SetActive(false);
 
 			if (health <= 0) {
-				manager.enemies.Remove(this);
+				manager.EnemyDeath(this);
 				Destroy(gameObject);
 			}
 		}
