@@ -918,7 +918,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deckManager: {fileID: 0}
-  discard: 1
+  deck: 0
 --- !u!114 &944363405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2104,7 +2104,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deckManager: {fileID: 0}
-  discard: 0
+  deck: 1
 --- !u!1 &2082929462
 GameObject:
   m_ObjectHideFlags: 0

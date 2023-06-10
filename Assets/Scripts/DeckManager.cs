@@ -19,11 +19,14 @@ public class DeckManager : MonoBehaviour {
 	public GameObject cancelButton;
 
 	public GameManager gameManager;
+	public Player player;
 
 	public TextMeshProUGUI drawPileText;
 	public TextMeshProUGUI discardPileText;
 
 	private System.Random rng = new System.Random();
+
+	public int playerHealth = 80;
 
 	private void Awake() {
 		DontDestroyOnLoad(gameObject);
@@ -73,11 +76,14 @@ public class DeckManager : MonoBehaviour {
 	public void CombatEnd() {
 		drawPile.Clear();
 		discardPile.Clear();
+		playerHealth = player.health;
+		gameManager = null;
+		player = null;
 		drawPileText = null;
 		discardPileText = null;
 	}
 
-	public void ShowDeck(List<GameObject> pile) {
+	public void ShowDeck(List<GameObject> pile, bool removal) {
 		shownPile = pile;
 		screenCover = Instantiate(screenCoverPrefab, new Vector3(0, 0, -0.02f), Quaternion.identity);
 		cancelButton.SetActive(true);
@@ -86,9 +92,20 @@ public class DeckManager : MonoBehaviour {
 		shownCardsHolder = new GameObject("Shown Pile");
 		foreach (GameObject card in pile) {
 			card.GetComponent<Card>().enabled = false;
-			card.GetComponent<CardChoice>().enabled = false;
+			if (!removal) {
+				card.GetComponent<CardChoice>().enabled = false;
+			} else {
+				card.GetComponent<CardChoice>().enabled = true;
+				card.GetComponent<CardChoice>().add = false;
+			}
 
-			Instantiate(card, new Vector3(x, y, -0.03f), Quaternion.identity).transform.parent = shownCardsHolder.transform;
+			GameObject shownCard = Instantiate(card, new Vector3(x, y, -0.03f), Quaternion.identity);
+			shownCard.transform.parent = shownCardsHolder.transform;
+
+			if (removal) {
+				//Ceci doit être fait après Instantiate(), puisque autrement, thisPrefab devient le clone GameObject et non le prefab.
+				shownCard.GetComponent<CardChoice>().thisPrefab = card;
+			}
 
 			if (x == 6) {
 				x = -6;

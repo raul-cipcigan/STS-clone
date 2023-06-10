@@ -4,17 +4,25 @@ using UnityEngine;
 
 public class CardChoice : MonoBehaviour {
 	public DeckManager deckManager;
-	public CardChoiceManager cardChoiceManager;
+	private CardChoiceManager cardChoiceManager;
 
 	public GameObject thisPrefab;
 
+	public bool add = true;
+
 	private void Start() {
 		deckManager = FindObjectOfType<DeckManager>();
+		cardChoiceManager = FindObjectOfType<CardChoiceManager>();
 	}
 
 	private void OnMouseDown() {
 		if (enabled) {
-			deckManager.deck.Add(thisPrefab);
+			if (add) {
+				deckManager.deck.Add(thisPrefab);
+			} else {
+				deckManager.deck.Remove(thisPrefab);
+				deckManager.StopShowingDeck(false);
+			}
 			cardChoiceManager.Continue();
 		}
 	}

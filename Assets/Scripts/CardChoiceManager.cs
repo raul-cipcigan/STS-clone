@@ -6,17 +6,23 @@ using UnityEngine.SceneManagement;
 
 public class CardChoiceManager : MonoBehaviour {
 	public List<GameObject> cards = new List<GameObject>();
-
 	public List<GameObject> cardChoice = new List<GameObject>();
 
 	private void Start() {
 		cards = Resources.LoadAll<GameObject>("Cards").ToList();
-		cardChoice.Add(cards[0]);
-		cardChoice[0].GetComponent<Card>().enabled = false;
-		cardChoice[0].GetComponent<CardChoice>().enabled = true;
-		cardChoice[0].GetComponent<CardChoice>().cardChoiceManager = this;
-		GameObject card = Instantiate(cardChoice[0], new Vector3(0, 0, 0), Quaternion.identity);
-		card.GetComponent<CardChoice>().thisPrefab = cardChoice[0];
+		int iter = 0;
+		int initCount = cards.Count;
+
+		for (int i = initCount; i > initCount - 3; i--) {
+			int rand = Random.Range(0, i);
+			cardChoice.Add(cards[rand]);
+			cards.RemoveAt(rand);
+			cardChoice[iter].GetComponent<Card>().enabled = false;
+			cardChoice[iter].GetComponent<CardChoice>().enabled = true;
+			GameObject card = Instantiate(cardChoice[iter], new Vector3((iter - 1) * 3.5f, 0, 0), Quaternion.identity);
+			card.GetComponent<CardChoice>().thisPrefab = cardChoice[iter];
+			iter++;
+		}
 	}
 
 	public void Continue() {

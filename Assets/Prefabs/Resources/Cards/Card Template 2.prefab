@@ -235,5 +235,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deckManager: {fileID: 0}
-  cardChoiceManager: {fileID: 0}
   thisPrefab: {fileID: 2049027005601373680}
+  add: 0

@@ -173,7 +173,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	private IEnumerator Wait() {
-		//Cette fonction serait normalement invoquée dans Start(), mais dans PileButtons.cs, drawPileText et discardPileText sont aussi assignés.
+		//Cette fonction serait normalement invoquée dans Start(), mais dans PileButtons.cs, drawPileText et discardPileText sont aussi assignés dans Start().
 		//Puisque les cartes ne peuvent pas être pigés sans ce texte (les fonctions sont intérrompues par le manque du texte),
 		//il faut attendre au prochain frame pour commencer à piger les cartes.
 		yield return new WaitForEndOfFrame();

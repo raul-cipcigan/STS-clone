@@ -151,8 +151,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deckManager: {fileID: 0}
-  cardChoiceManager: {fileID: 0}
   thisPrefab: {fileID: 2049027005601373680}
+  add: 0
 --- !u!1 &2491695818995834986
 GameObject:
   m_ObjectHideFlags: 0

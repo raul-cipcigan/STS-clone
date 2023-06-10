@@ -6,17 +6,21 @@ using UnityEngine;
 public class Player : MonoBehaviour {
 
 	private GameManager manager;
+	private DeckManager deckManager;
 
 	public TextMeshPro healthText;
 	public TextMeshPro defenceText;
 
 	public GameObject defenceIcon;
 
-	public int health = 80;
+	public int health;
 	public int defence = 0;
 
 	private void Start() {
 		manager = FindObjectOfType<GameManager>();
+		deckManager = FindObjectOfType<DeckManager>();
+		deckManager.player = this;
+		health = deckManager.playerHealth;
 
 		healthText.text = health.ToString() + "/80";
 		defenceText.text = "";
