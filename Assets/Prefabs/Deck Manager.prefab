@@ -54,3 +54,4 @@ MonoBehaviour:
   - {fileID: 2049027005601373680, guid: 0e20c1491a0840f47a0f717a5c108fb8, type: 3}
   drawPile: []
   discardPile: []
+  screenCoverPrefab: {fileID: 3311152468657980047, guid: e871eeef207f8a44889bb55d2ba7301e, type: 3}

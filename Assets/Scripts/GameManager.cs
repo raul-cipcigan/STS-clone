@@ -24,6 +24,13 @@ public class GameManager : MonoBehaviour {
 	public int energy = 3;
 	private bool gameOver = false;
 
+	private void Awake() {
+		deckManager = FindObjectOfType<DeckManager>();
+		if (deckManager == null) {
+			deckManager = Instantiate(deckManagerPrefab).GetComponent<DeckManager>();
+		}
+	}
+
 	private void Start() {
 		enemies = FindObjectsOfType<Enemy>().ToList();
 		player = FindObjectOfType<Player>();
@@ -32,19 +39,13 @@ public class GameManager : MonoBehaviour {
 		}
 		energyText.text = "3/3";
 
-		deckManager = FindObjectOfType<DeckManager>();
-		if (deckManager == null) {
-			deckManager = Instantiate(deckManagerPrefab).GetComponent<DeckManager>();
-		}
+		deckManager.gameManager = this;
+		StartCoroutine(Wait());
 	}
 
 	private void Update() {
 		if (Input.GetKeyDown(KeyCode.Space)) {
 			DrawCard(deckManager.NextCard());
-		}
-
-		if (Input.GetKeyDown(KeyCode.M)) {
-			StartCoroutine(Draw(4));
 		}
 
 		if (Input.GetMouseButtonDown(1)) {
@@ -169,5 +170,13 @@ public class GameManager : MonoBehaviour {
 			}
 			drawnCards[0].GetComponent<Card>().Discard();
 		}
+	}
+
+	private IEnumerator Wait() {
+		//Cette fonction serait normalement invoquée dans Start(), mais dans PileButtons.cs, drawPileText et discardPileText sont aussi assignés.
+		//Puisque les cartes ne peuvent pas être pigés sans ce texte (les fonctions sont intérrompues par le manque du texte),
+		//il faut attendre au prochain frame pour commencer à piger les cartes.
+		yield return new WaitForEndOfFrame();
+		deckManager.CombatStart();
 	}
 }
