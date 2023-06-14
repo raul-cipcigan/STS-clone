@@ -19,6 +19,7 @@ public class CardChoiceManager : MonoBehaviour {
 			cards.RemoveAt(rand);
 			cardChoice[iter].GetComponent<Card>().enabled = false;
 			cardChoice[iter].GetComponent<CardChoice>().enabled = true;
+			cardChoice[iter].GetComponent<CardChoice>().add = true;
 			GameObject card = Instantiate(cardChoice[iter], new Vector3((iter - 1) * 3.5f, 0, 0), Quaternion.identity);
 			card.GetComponent<CardChoice>().thisPrefab = cardChoice[iter];
 			iter++;
@@ -26,6 +27,6 @@ public class CardChoiceManager : MonoBehaviour {
 	}
 
 	public void Continue() {
-		SceneManager.LoadScene(0);
+		SceneManager.LoadScene(1);
 	}
 }

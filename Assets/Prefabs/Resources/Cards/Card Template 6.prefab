@@ -121,7 +121,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2049027005601373680}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 561e0104bf643f64397313b99c5d23f0, type: 3}
   m_Name: 
@@ -145,14 +145,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2049027005601373680}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fc0db03cc9834c34fb432370af2328d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   deckManager: {fileID: 0}
-  cardChoiceManager: {fileID: 0}
   thisPrefab: {fileID: 2049027005601373680}
+  add: 1
 --- !u!1 &4288826754507104631
 GameObject:
   m_ObjectHideFlags: 0

@@ -55,3 +55,10 @@ MonoBehaviour:
   drawPile: []
   discardPile: []
   screenCoverPrefab: {fileID: 3311152468657980047, guid: e871eeef207f8a44889bb55d2ba7301e, type: 3}
+  cancelButton: {fileID: 0}
+  gameManager: {fileID: 0}
+  player: {fileID: 0}
+  drawPileText: {fileID: 0}
+  discardPileText: {fileID: 0}
+  playerHealth: 80
+  wave: 0

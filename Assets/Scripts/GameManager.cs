@@ -32,15 +32,11 @@ public class GameManager : MonoBehaviour {
 	}
 
 	private void Start() {
-		enemies = FindObjectsOfType<Enemy>().ToList();
-		player = FindObjectOfType<Player>();
-		foreach (Enemy enemy in enemies) {
-			enemy.ChooseMove();
-		}
-		energyText.text = "3/3";
-
 		deckManager.gameManager = this;
 		StartCoroutine(Wait());
+
+		player = FindObjectOfType<Player>();
+		energyText.text = "3/3";
 	}
 
 	private void Update() {
@@ -92,7 +88,7 @@ public class GameManager : MonoBehaviour {
 
 		if (enemies.Count == 0) {
 			deckManager.CombatEnd();
-			SceneManager.LoadScene(1);
+			SceneManager.LoadScene(2);
 		}
 	}
 
@@ -100,6 +96,7 @@ public class GameManager : MonoBehaviour {
 		StartCoroutine(EndTurn());
 	}
 
+	//Arrête toutes les fonctions du jeu pour montrer le game over screen sans que le joueur peut interagir avec d'autres objets
 	public void GameOver() {
 		gameOver = true;
 		StopAllCoroutines();
@@ -118,7 +115,6 @@ public class GameManager : MonoBehaviour {
 
 		Destroy(deckManager);
 		
-		//Arrête toutes les fonctions du jeu
 		gameObject.SetActive(false);
 	}
 
@@ -173,10 +169,19 @@ public class GameManager : MonoBehaviour {
 	}
 
 	private IEnumerator Wait() {
+		yield return new WaitForEndOfFrame();
+
 		//Cette fonction serait normalement invoquée dans Start(), mais dans PileButtons.cs, drawPileText et discardPileText sont aussi assignés dans Start().
 		//Puisque les cartes ne peuvent pas être pigés sans ce texte (les fonctions sont intérrompues par le manque du texte),
 		//il faut attendre au prochain frame pour commencer à piger les cartes.
-		yield return new WaitForEndOfFrame();
 		deckManager.CombatStart();
+
+		//Similairement, dans EnemySpawner.cs, il faut attendre pour Start() pour s'assurer que deckManager existe.
+		//Ceci signifie qu'il faut attendre pour après Start() pour s'assurer que les ennemis existent.
+		enemies = FindObjectsOfType<Enemy>().ToList();
+
+		foreach (Enemy enemy in enemies) {
+			enemy.ChooseMove();
+		}
 	}
 }

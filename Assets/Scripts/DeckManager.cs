@@ -27,6 +27,7 @@ public class DeckManager : MonoBehaviour {
 	private System.Random rng = new System.Random();
 
 	public int playerHealth = 80;
+	public int wave = 0;
 
 	private void Awake() {
 		DontDestroyOnLoad(gameObject);
@@ -81,6 +82,7 @@ public class DeckManager : MonoBehaviour {
 		player = null;
 		drawPileText = null;
 		discardPileText = null;
+		wave++;
 	}
 
 	public void ShowDeck(List<GameObject> pile, bool removal) {

@@ -17,11 +17,11 @@ public class Enemy : MonoBehaviour {
 	public TextMeshPro healthText;
 	public TextMeshPro defenceText;
 
-	public int health = 50;
+	public int health;
 	public int maxHealth = 50;
 	public int defence = 0;
-	public int damage = 5;
-	public int block = 5;
+	public int damage = 3;
+	public int block = 3;
 
 	public int nextMove;
 
@@ -30,6 +30,7 @@ public class Enemy : MonoBehaviour {
 	private void Start() {
 		manager = FindObjectOfType<GameManager>();
 		player = FindObjectOfType<Player>();
+		health = maxHealth;
 		healthText.text = health.ToString() + "/" + maxHealth.ToString();
 		defenceText.text = "";
 	}
