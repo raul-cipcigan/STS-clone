@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Collections;
 using UnityEngine;
 
@@ -13,11 +14,15 @@ public class EnemySpawner : MonoBehaviour {
 
 	public List<GameObject> newEnemies = new List<GameObject>();
 
+	private List<Sprite> enemySprites;
+
 	private int upgradeTokens;
 	private int spawnTokens;
 
 	private void Start() {
 		deckManager = FindObjectOfType<DeckManager>();
+
+		enemySprites = Resources.LoadAll<Sprite>("Sprites").ToList<Sprite>();
 
 		//Chaque nouveau ennemi coûte 4 upgrade tokens pour balancer le jeu, et il y a une limite de 4 ennemis.
 		//Ce ternary operation détermine le nombre maximum d'ennemis qui peut être créé par le nombre de upgrade tokens qui existent.
@@ -49,6 +54,7 @@ public class EnemySpawner : MonoBehaviour {
 			newEnemy.GetComponent<Enemy>().damage += Mathf.CeilToInt(Mathf.FloorToInt(upgradeTokens / 2) / spawnTokens);
 			newEnemy.GetComponent<Enemy>().block += Mathf.CeilToInt(Mathf.FloorToInt(upgradeTokens / 3) / spawnTokens);
 			newEnemy.GetComponent<Enemy>().maxHealth += Mathf.CeilToInt(Mathf.FloorToInt(upgradeTokens * 2) / spawnTokens);
+			newEnemy.GetComponent<SpriteRenderer>().sprite = enemySprites[Random.Range(0, 2)];
 		}
 	}
 }
